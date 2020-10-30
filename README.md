@@ -1,5 +1,7 @@
 Github action for getting the next semver.
 
+-- Forked from Benbentwo/increment-semver: https://github.com/Benbentwo/increment-semver
+
 Example:
 ========
     on: [push]
