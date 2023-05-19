@@ -10,12 +10,15 @@ do
     M ) major=true;;
     m ) minor=true;;
     p ) patch=true;;
+    s ) snapshot=true;;
   esac
 done
 
 shift $(($OPTIND - 1))
 
 #version=$1
+snapshotNumber=$2
+
 echo "cd to github workspace"
 cd ${GITHUB_WORKSPACE}
 git for-each-ref refs/tags/[0-9]*.[0-9]*.[0-9]* --count=1 --sort=-version:refname --format='%(refname:short)'
@@ -74,6 +77,13 @@ fi
 echo "${a[0]}.${a[1]}.${a[2]}"
 version=$(echo "${a[0]}.${a[1]}.${a[2]}")
 just_numbers=$(echo "${major_version}.${a[1]}.${a[2]}")
-echo "::set-output name=version::${version}"
+
+if [ ! -z $snapshot ]
+then
+  echo "::set-output name=version::${version}-SNAPSHOT-${snapshotNumber}"
+else
+  echo "::set-output name=version::${version}"
+fi
+
 echo "::set-output name=stripped-version::${just_numbers}"
 
